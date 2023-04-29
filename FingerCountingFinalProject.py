@@ -50,7 +50,7 @@ while True:
         #print(fingers)
         totalFingers = fingers.count(1) # to find how many "1"'s there is
 
-
+        #odfhoubo
         h, w, c = overlayList[0].shape
         img[0:h,0:w]=overlayList[totalFingers-1]
 
