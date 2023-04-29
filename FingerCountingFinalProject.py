@@ -34,21 +34,35 @@ while True:
     if len(lmList) != 0:
         fingers = []
 
-
-        # for the thumb
-        if lmList[tipIds[0]][1] > lmList[tipIds[0] - 1][1]:
-            fingers.append(1)
-        else:
-            fingers.append(0)
-        # for the fingers
-        for id in range(1,5):
-            if lmList[tipIds[id]][2] < lmList[tipIds[id]-2][2]:
+        if lmList[tipIds[2]][1] > lmList[tipIds[4]][1]:
+            # for the thumb
+            if lmList[tipIds[0]][1] > lmList[tipIds[0] - 1][1]:
                 fingers.append(1)
             else:
                 fingers.append(0)
+            # for the fingers
+            for id in range(1,5):
+                if lmList[tipIds[id]][2] < lmList[tipIds[id]-1][2]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+        
+        else:
+            # for the thumb
+            if lmList[tipIds[0]][1] < lmList[tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+            # for the fingers
+            for id in range(1,5):
+                if lmList[tipIds[id]][2] < lmList[tipIds[id]-1][2]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
 
-        #print(fingers)
+        print(lmList)
         totalFingers = fingers.count(1) # to find how many "1"'s there is
+            
 
         #odfhoubo
         h, w, c = overlayList[0].shape
