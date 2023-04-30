@@ -25,19 +25,19 @@ class handDetector():
                     self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)  # this is for a single hand
         return img
 
-    def findPosition(self, img, handNo=0, draw = True):
-
+    def findPositions(self, img, handNos=[0, 1], draw=True):
         lmList = []
         if self.results.multi_hand_landmarks:
-            myHand = self.results.multi_hand_landmarks[handNo]
-
-            for id, lm in enumerate(myHand.landmark):
-                h, w, c = img.shape  # height width and channel of our image
-                cx, cy = int(lm.x * w), int(lm.y * h)
-                lmList.append([id, cx, cy])
-                if draw:
-                    cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
-
+            for handIndex, handNo in enumerate(handNos):
+                #len of hand landmarks returns number of hands detected so if 1 hand if case does handNo 0 only if 2 hands it does 0 and 1
+                if handNo < len(self.results.multi_hand_landmarks):
+                    myHand = self.results.multi_hand_landmarks[handNo]
+                    for id, lm in enumerate(myHand.landmark):
+                        h, w, c = img.shape  # height width and channel of our image
+                        cx, cy = int(lm.x * w), int(lm.y * h)
+                        lmList.append([id, cx, cy])
+                        if draw:
+                            cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
         return lmList
 
 def main():
@@ -49,10 +49,10 @@ def main():
     while True:
         success, img = cap.read()  # this will give us the frame
         img = detector.findHands(img)
-        lmList = detector.findPosition(img)
+        lmList = detector.findPositions(img)
 
         if len(lmList) !=0:
-            print(lmList[4])
+            print(len(lmList))
 
         cTime = time.time()
         fps = 1 / (cTime - pTime)
