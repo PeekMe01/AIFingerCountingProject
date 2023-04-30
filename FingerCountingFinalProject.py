@@ -21,7 +21,7 @@ for imPath in myList:
 print(len(overlayList))
 pTime = 0
 
-detector = htm.handDetector(detectionConfidence=0.75)
+detector = htm.handDetector(detectionConfidence=0.90)
 
 #first hand markers are from 0 to 20, second hand from 21 to 41
 tipIds = [4, 8, 12, 16, 20]
@@ -38,26 +38,26 @@ while True:
 
         if lmList[tipIds[2]][1] > lmList[tipIds[4]][1]:
             # for the thumb
-            if lmList[tipIds[0]][1] > lmList[tipIds[0] - 3][1]:
+            if lmList[tipIds[0]][1] > lmList[tipIds[0] - 2][1]:
                 fingers.append(1)
             else:
                 fingers.append(0)
             # for the fingers
             for id in range(1,5):
-                if lmList[tipIds[id]][2] < lmList[tipIds[id]-1][2]:
+                if lmList[tipIds[id]][2] < lmList[tipIds[id]-2][2]:
                     fingers.append(1)
                 else:
                     fingers.append(0)
         
         else:
             # for the thumb
-            if lmList[tipIds[0]][1] < lmList[tipIds[0] - 3][1]:
+            if lmList[tipIds[0]][1] < lmList[tipIds[0] - 2][1]:
                 fingers.append(1)
             else:
                 fingers.append(0)
             # for the fingers
             for id in range(1,5):
-                if lmList[tipIds[id]][2] < lmList[tipIds[id]-1][2]:
+                if lmList[tipIds[id]][2] < lmList[tipIds[id]-2][2]:
                     fingers.append(1)
                 else:
                     fingers.append(0)
@@ -66,26 +66,26 @@ while True:
             
             if lmList[secound_hand_ids[2]][1] > lmList[secound_hand_ids[4]][1]:
                 # for the thumb
-                if lmList[secound_hand_ids[0]][1] > lmList[secound_hand_ids[0] - 3][1]:
+                if lmList[secound_hand_ids[0]][1] > lmList[secound_hand_ids[0] - 2][1]:
                     fingers.append(1)
                 else:
                     fingers.append(0)
                 # for the fingers
                 for id in range(1,5):
-                    if lmList[secound_hand_ids[id]][2] < lmList[secound_hand_ids[id]-1][2]:
+                    if lmList[secound_hand_ids[id]][2] < lmList[secound_hand_ids[id]-2][2]:
                         fingers.append(1)
                     else:
                         fingers.append(0)
         
             else:
                 # for the thumb
-                if lmList[secound_hand_ids[0]][1] < lmList[secound_hand_ids[0] - 3][1]:
+                if lmList[secound_hand_ids[0]][1] < lmList[secound_hand_ids[0] - 2][1]:
                     fingers.append(1)
                 else:
                     fingers.append(0)
                 # for the fingers
                 for id in range(1,5):
-                    if lmList[secound_hand_ids[id]][2] < lmList[secound_hand_ids[id]-1][2]:
+                    if lmList[secound_hand_ids[id]][2] < lmList[secound_hand_ids[id]-2][2]:
                         fingers.append(1)
                     else:
                         fingers.append(0)
