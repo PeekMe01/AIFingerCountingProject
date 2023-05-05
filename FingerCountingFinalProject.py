@@ -272,13 +272,13 @@ cap.set(4, hCam)
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 # images_path = os.path.join(dir_path, 'FingerImages')
 
-myList = os.listdir("FingerImages")
+#myList = os.listdir("FingerImages")
 
 overlayList = []
-for imPath in myList:
-    image = cv2.imread(f'{"FingerImages"}/{imPath}')
+#for imPath in myList:
+   # image = cv2.imread(f'{"FingerImages"}/{imPath}')
     # print(f'{folderPath}/{imPath}')
-    overlayList.append(image)
+   # overlayList.append(image)
 
 # print(len(overlayList))
 pTime = 0
@@ -303,7 +303,7 @@ while True:
         fingers = aquire_information(lmList, tipIds, secound_hand_ids)
 
         # odfhoubo
-        h, w, c = overlayList[0].shape
+       # h, w, c = overlayList[0].shape
         # img[0:h,0:w]=overlayList[totalFingers-1]
 
         # cv2.rectangle(img, (20,255), (170,425), (0,255,0), cv2.FILLED)
