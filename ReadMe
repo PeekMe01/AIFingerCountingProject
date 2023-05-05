@@ -24,3 +24,7 @@ Diagonal top right: > < > < thumb validated in y value and we compare to thumb t
 Diagonal top left: < < < <  thumb works on x value and we compare to thumb tip - 1
 Diagonal bottom right: > > > >  thumb works on x value and we compare to thumb tip - 1
 Diagonal bottom left: < > < >  thumb works on y value and we compare to thumb tip - 1
+
+
+
+Thumb detection needs more fixing especially
