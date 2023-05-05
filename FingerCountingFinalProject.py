@@ -41,6 +41,7 @@ def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
             (((lmList[hand_points[1]][1] > lmList[hand_points[0]][1]) and (lmList[hand_points[1]][2] < lmList[0][2])) or ((lmList[hand_points[1]][2] < lmList[hand_points[0]][2]))) and ((lmList[hand_points[2]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[2]][2] < lmList[hand_points[0]][2])) or
             (((lmList[hand_points[1]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[1]][2] < lmList[0][2])) or ((lmList[hand_points[1]][2] < lmList[hand_points[0]][2]))) and ((lmList[hand_points[2]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[2]][2] > lmList[hand_points[0]][2]))):
         palm_facing_camera_or_left_hand_not_facing = True
+        print("facing")
 
     else:
         palm_facing_camera_or_left_hand_not_facing = False
@@ -139,14 +140,14 @@ def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
                 if lmList[tipIds[0]][2] < lmList[tipIds[0] - 1][2]:
                     pointing_fingers += 1
 
-        elif hand_pointing_right:
+        elif hand_pointing_right and not diagonal_top_right and not diagonal_bottom_right:
             if lmList[tipIds[0]][2] > lmList[tipIds[0] - 1][2]:
                 pointing_fingers += 1
 
         elif hand_pointing_down or diagonal_bottom_right or diagonal_bottom_left:
 
             if hand_pointing_down and not diagonal_bottom_right and not diagonal_bottom_left:
-                if lmList[tipIds[0]][1] > lmList[tipIds[0] - 2][1]:
+                if lmList[tipIds[0]][1] < lmList[tipIds[0] - 2][1]:
                     pointing_fingers += 1
             elif diagonal_bottom_right and not diagonal_bottom_left:
                 if lmList[tipIds[0]][2] < lmList[tipIds[0] - 1][2]:
@@ -156,7 +157,7 @@ def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
                 if lmList[tipIds[0]][1] < lmList[tipIds[0] - 1][1]:
                     pointing_fingers += 1
 
-        elif hand_pointing_left:
+        elif hand_pointing_left and not diagonal_bottom_left and not diagonal_top_left:
             # If y value of thumb tip smaller than y value of under thumb tip
             if lmList[tipIds[0]][2] < lmList[tipIds[0] - 1][2]:
                 pointing_fingers += 1
