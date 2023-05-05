@@ -1,0 +1,26 @@
+y values have opposite <>
+
+
+facing:
+
+up: > < < <
+right: > > > <
+down: < > > >
+left: < < < >
+
+Diagonal top right: > < > <  thumb works on x value and we compare to thumb tip - 1
+Diagonal top left: < < < <   thumb works on y value and we compare to thumb tip - 1
+Diagonal bottom right: > > > >  thumb works on y value and we compare to thumb tip - 1
+Diagonal bottom left: < > < >  thumb works on x value and we compare to thumb tip - 1
+
+Not facing:
+
+up: < < > <
+right: > < > >
+down: > > < >
+left: < > < <
+
+Diagonal top right: > < > < thumb validated in y value and we compare to thumb tip - 1
+Diagonal top left: < < < <  thumb works on x value and we compare to thumb tip - 1
+Diagonal bottom right: > > > >  thumb works on x value and we compare to thumb tip - 1
+Diagonal bottom left: < > < >  thumb works on y value and we compare to thumb tip - 1
