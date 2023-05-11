@@ -22,8 +22,21 @@ diagonal_bottom_left = False
 diagonal_bottom_right = False
 
 
+
+
+
 def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
     hand_points = []
+    temp_pointing_fingers = pointing_fingers
+    
+    #For rock / paper / scissors
+    left_hand_rock = False
+    left_hand_paper = False
+    left_hand_scissors = False
+
+    right_hand_rock = False
+    right_hand_paper = False
+    right_hand_scissors = False
 
     if two_hands:
         hand_points.append(21)
@@ -41,7 +54,6 @@ def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
             (((lmList[hand_points[1]][1] > lmList[hand_points[0]][1]) and (lmList[hand_points[1]][2] < lmList[0][2])) or ((lmList[hand_points[1]][2] < lmList[hand_points[0]][2]))) and ((lmList[hand_points[2]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[2]][2] < lmList[hand_points[0]][2])) or
             (((lmList[hand_points[1]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[1]][2] < lmList[0][2])) or ((lmList[hand_points[1]][2] < lmList[hand_points[0]][2]))) and ((lmList[hand_points[2]][1] < lmList[hand_points[0]][1]) and (lmList[hand_points[2]][2] > lmList[hand_points[0]][2]))):
         palm_facing_camera_or_left_hand_not_facing = True
-        print("facing")
 
     else:
         palm_facing_camera_or_left_hand_not_facing = False
@@ -239,15 +251,62 @@ def count_hand_pointing(lmList, tipIds, pointing_fingers, two_hands):
         for id in range(1, 5):
             if lmList[tipIds[id]][1] < lmList[tipIds[id]-2][1]:
                 pointing_fingers += 1
+                
+    
+    if two_hands:
+        added = pointing_fingers - temp_pointing_fingers
+        
+        if added == 2:
+            right_hand_scissors = True
+        else:
+             right_hand_scissors = False
+        if added == 0:
+            right_hand_rock = True
+        else:
+            right_hand_rock = False
+        if added == 5:
+            right_hand_paper = True
+        else:
+            right_hand_paper = False
+    
+    else:
+        if pointing_fingers == 2:
+            left_hand_scissors = True
+        else:
+            left_hand_scissors = False
+        if pointing_fingers == 0:
+            left_hand_rock = True
+        else:
+            left_hand_rock = False
+        if pointing_fingers == 5:
+            left_hand_paper = True
+        else:
+            left_hand_paper = False
+        
 
-    return pointing_fingers
+    return pointing_fingers, left_hand_rock, left_hand_paper, left_hand_scissors, right_hand_rock, right_hand_paper, right_hand_scissors
 
 
 def aquire_information(lmList, tipIds, secound_hand_ids):
     # Gets number of pointing fingers
     pointing_fingers = 0
-    test2 = 0
     two_hands = False
+    
+    #For rock / paper / scissors
+    left_hand_rock = False
+    left_hand_paper = False
+    left_hand_scissors = False
+
+    right_hand_rock = False
+    right_hand_paper = False
+    right_hand_scissors = False
+    
+    temp1 = False
+    temp2 = False
+    temp3 = False
+    temp4 = False
+    temp5 = False
+    temp6 = False
 
     if len(lmList) > 21:
         two_hands = True
@@ -256,35 +315,28 @@ def aquire_information(lmList, tipIds, secound_hand_ids):
 
         # Two hands or not
     if not two_hands:
-        pointing_fingers = count_hand_pointing(
+        pointing_fingers, temp1, temp2, temp3, temp4, temp5, temp6 = count_hand_pointing(
             lmList, tipIds, pointing_fingers, False)
 
     else:
-        pointing_fingers = count_hand_pointing(
+        #Counts points on first hand
+        pointing_fingers, left_hand_rock, left_hand_paper, left_hand_scissors, temp1, temp2, temp3 = count_hand_pointing(
             lmList, tipIds, pointing_fingers, False)
-        pointing_fingers = count_hand_pointing(
+        
+        #Counts points on secound hand
+        pointing_fingers, temp1, temp2, temp3, right_hand_rock, right_hand_paper, right_hand_scissors = count_hand_pointing(
             lmList, secound_hand_ids, pointing_fingers, True)
 
-    return pointing_fingers
+    return pointing_fingers, two_hands, left_hand_rock, left_hand_paper, left_hand_scissors, right_hand_rock, right_hand_paper, right_hand_scissors
 
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
 
-# For making runnable exe work
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-# images_path = os.path.join(dir_path, 'FingerImages')
 
-#myList = os.listdir("FingerImages")
 
-overlayList = []
-#for imPath in myList:
-   # image = cv2.imread(f'{"FingerImages"}/{imPath}')
-    # print(f'{folderPath}/{imPath}')
-   # overlayList.append(image)
 
-# print(len(overlayList))
 pTime = 0
 
 detector = htm.handDetector(detectionConfidence=0.90)
@@ -300,25 +352,63 @@ while True:
     img = detector.findHands(img)
     lmList = detector.findPositions(img, draw=False)
     # print(len(lmList))
+   
 
     if len(lmList) != 0:
-        fingers = 0
+        
         # Aquires all information of the hand position
-        fingers = aquire_information(lmList, tipIds, secound_hand_ids)
+         
+    
+        fingers, two_hands, left_hand_rock, left_hand_paper, left_hand_scissors, right_hand_rock, right_hand_paper, right_hand_scissors  = aquire_information(lmList, tipIds, secound_hand_ids)
 
-        # odfhoubo
-       # h, w, c = overlayList[0].shape
-        # img[0:h,0:w]=overlayList[totalFingers-1]
 
-        # cv2.rectangle(img, (20,255), (170,425), (0,255,0), cv2.FILLED)
         cv2.putText(img, str(fingers), (45, 375),
                     cv2.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 25)
-    cTime = time.time()
-    fps = 1/(cTime-pTime)
-    pTime = cTime
+        if two_hands:
+            #Conditions for ties
+            if left_hand_paper and right_hand_paper:
+                cv2.putText(img, f'Paper Tie !', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+            elif left_hand_scissors and right_hand_scissors:
+                cv2.putText(img, f'Scissors Tie !', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                
+            elif left_hand_rock and right_hand_rock:
+                cv2.putText(img, f'Rock Tie !', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                
+                
+                
+            #Conditions for wins
+            elif left_hand_rock and right_hand_paper:
+                cv2.putText(img, f'Left Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+            elif right_hand_rock and left_hand_paper:
+                cv2.putText(img, f'Right Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                
+                
+               
+            elif left_hand_paper and right_hand_scissors:
+                cv2.putText(img, f'Left Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+            elif right_hand_paper and left_hand_scissors:
+                cv2.putText(img, f'Right Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                
+                
+             
+                
+            elif left_hand_scissors and right_hand_rock:
+                cv2.putText(img, f'Left Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+            elif right_hand_scissors and left_hand_rock:
+                cv2.putText(img, f'Right Player Wins!', (200, 150),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                
+            
+            
 
-    cv2.putText(img, f'FPS: {int(fps)}', (400, 150),
-                cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
     
     cv2.putText(img, f'Press 1 to exit:', (100, 50),
                 cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
